@@ -182,30 +182,44 @@ def parse_ranking_from_text(ranking_text: str) -> List[str]:
         ranking_text: The full text response from the model
 
     Returns:
-        List of response labels in ranked order
+        List of response labels in ranked order (e.g., ['Response A', 'Response C', ...])
     """
     import re
 
+    # Remove code fences if present
+    text_cleaned = re.sub(r'```[\w]*\n?', '', ranking_text)
+
     # Look for "FINAL RANKING:" section
-    if "FINAL RANKING:" in ranking_text:
+    if "FINAL RANKING:" in text_cleaned:
         # Extract everything after "FINAL RANKING:"
-        parts = ranking_text.split("FINAL RANKING:")
+        parts = text_cleaned.split("FINAL RANKING:")
         if len(parts) >= 2:
             ranking_section = parts[1]
+            
             # Try to extract numbered list format (e.g., "1. Response A")
             # This pattern looks for: number, period, optional space, "Response X"
-            numbered_matches = re.findall(r'\d+\.\s*Response [A-Z]', ranking_section)
+            numbered_matches = re.findall(r'\d+\.\s*Response\s+[A-Z]', ranking_section, re.IGNORECASE)
             if numbered_matches:
-                # Extract just the "Response X" part
-                return [re.search(r'Response [A-Z]', m).group() for m in numbered_matches]
+                # Extract just the "Response X" part and normalize spacing
+                result = []
+                for m in numbered_matches:
+                    match = re.search(r'Response\s+([A-Z])', m, re.IGNORECASE)
+                    if match:
+                        result.append(f"Response {match.group(1).upper()}")
+                return result
 
             # Fallback: Extract all "Response X" patterns in order
-            matches = re.findall(r'Response [A-Z]', ranking_section)
-            return matches
+            matches = re.findall(r'Response\s+[A-Z]', ranking_section, re.IGNORECASE)
+            if matches:
+                # Normalize spacing and capitalization
+                return [re.sub(r'Response\s+', 'Response ', m, flags=re.IGNORECASE).title() for m in matches]
 
     # Fallback: try to find any "Response X" patterns in order
-    matches = re.findall(r'Response [A-Z]', ranking_text)
-    return matches
+    matches = re.findall(r'Response\s+[A-Z]', text_cleaned, re.IGNORECASE)
+    if matches:
+        return [re.sub(r'Response\s+', 'Response ', m, flags=re.IGNORECASE).title() for m in matches]
+    
+    return []
 
 
 def calculate_aggregate_rankings(

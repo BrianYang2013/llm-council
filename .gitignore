@@ -15,6 +15,12 @@ wheels/
 # Data files
 data/
 
+# macOS files
+.DS_Store
+
+# Local files
+todo.md
+
 # Frontend
 frontend/node_modules/
 frontend/dist/

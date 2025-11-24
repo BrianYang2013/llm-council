@@ -32,7 +32,7 @@ async def query_model(
     }
 
     try:
-        async with httpx.AsyncClient(timeout=timeout) as client:
+        async with httpx.AsyncClient(timeout=timeout, verify=False) as client:
             response = await client.post(
                 OPENROUTER_API_URL,
                 headers=headers,

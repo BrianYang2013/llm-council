@@ -58,13 +58,19 @@ export default function Stage2({ rankings, labelToModel, aggregateRankings }) {
           <div className="parsed-ranking">
             <strong>Extracted Ranking:</strong>
             <ol>
-              {rankings[activeTab].parsed_ranking.map((label, i) => (
-                <li key={i}>
-                  {labelToModel && labelToModel[label]
-                    ? labelToModel[label].split('/')[1] || labelToModel[label]
-                    : label}
-                </li>
-              ))}
+              {rankings[activeTab].parsed_ranking.map((label, i) => {
+                // Normalize the label format
+                const normalizedLabel = label.trim();
+                const modelName = labelToModel && labelToModel[normalizedLabel];
+                
+                return (
+                  <li key={i}>
+                    {modelName
+                      ? modelName.split('/')[1] || modelName
+                      : normalizedLabel}
+                  </li>
+                );
+              })}
             </ol>
           </div>
         )}
