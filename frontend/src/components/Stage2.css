@@ -506,3 +506,90 @@
   margin: 4px 0;
   padding-left: 0;
 }
+
+/* Ranking Matrix */
+.ranking-matrix-container {
+  margin-top: 16px;
+}
+
+.matrix-description {
+  margin: 0 0 12px 0;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.ranking-matrix-wrapper {
+  overflow-x: auto;
+  border-radius: 6px;
+  border: 1px solid #e8e8e8;
+  background: #ffffff;
+}
+
+.ranking-matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  min-width: 500px;
+}
+
+.matrix-header-cell {
+  background: #f5f5f5;
+  padding: 12px;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #e0e0e0;
+  border-right: 1px solid #e8e8e8;
+}
+
+.matrix-header-cell:first-child {
+  text-align: left;
+}
+
+.matrix-header-cell:last-child {
+  border-right: none;
+}
+
+.ranking-matrix-table tbody tr td {
+  padding: 12px;
+  border-right: 1px solid #e8e8e8;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.ranking-matrix-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.ranking-matrix-table tbody tr td:last-child {
+  border-right: none;
+}
+
+.matrix-evaluator-cell {
+  font-weight: 500;
+  font-family: monospace;
+  font-size: 12px;
+  color: #333;
+  background: #f9f9f9;
+  text-align: left;
+}
+
+.matrix-position-cell {
+  text-align: center;
+  vertical-align: middle;
+  transition: background-color 0.2s;
+}
+
+.matrix-position-cell:hover {
+  filter: brightness(0.95);
+}
+
+.position-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 12px;
+  color: #333;
+  white-space: nowrap;
+}

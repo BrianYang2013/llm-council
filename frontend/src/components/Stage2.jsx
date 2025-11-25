@@ -33,13 +33,16 @@ function calculateControversyMetrics(rankings, labelToModel) {
     positionMatrix[model] = [];
   });
 
-  // Fill the matrix
-  rankings.forEach(ranking => {
+  // Create evaluator matrix: for each evaluator, track what positions they gave to each response
+  const evaluatorMatrix = {};
+  rankings.forEach((ranking, evalIndex) => {
+    evaluatorMatrix[ranking.model] = {};
     const parsed = ranking.parsed_ranking || [];
     parsed.forEach((label, position) => {
       const modelName = labelToModel[label.trim()];
       if (modelName) {
         positionMatrix[modelName].push(position + 1); // 1-indexed
+        evaluatorMatrix[ranking.model][label.trim()] = position + 1;
       }
     });
   });
@@ -66,6 +69,7 @@ function calculateControversyMetrics(rankings, labelToModel) {
     controversyScore,
     stats,
     positionMatrix,
+    evaluatorMatrix,
     labels
   };
 }
@@ -76,6 +80,66 @@ function getControversyLevel(score) {
   if (score < 60) return { level: 'Mixed Opinions', color: '#f39c12' };
   if (score < 80) return { level: 'High Disagreement', color: '#e74c3c' };
   return { level: 'Maximum Disagreement', color: '#c0392b' };
+}
+
+function RankingMatrix({ evaluatorMatrix, labelToModel, labels }) {
+  if (!evaluatorMatrix || !labels) return null;
+
+  const getPositionBadge = (position) => {
+    const positions = ['1st', '2nd', '3rd', '4th', '5th'];
+    return positions[position - 1] || `${position}th`;
+  };
+
+  const getPositionColor = (position) => {
+    if (position === 1) return '#d4edda'; // light green for 1st
+    if (position === 2) return '#fff3cd'; // light yellow for 2nd
+    return '#e9ecef'; // light gray for 3rd+
+  };
+
+  return (
+    <div className="ranking-matrix-container">
+      <p className="matrix-description">
+        Concrete ranking data: each cell shows the position that evaluator gave to each response.
+      </p>
+      <div className="ranking-matrix-wrapper">
+        <table className="ranking-matrix-table">
+          <thead>
+            <tr>
+              <th className="matrix-header-cell">Evaluator</th>
+              {labels.map((label) => (
+                <th key={label} className="matrix-header-cell">
+                  {label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {Object.entries(evaluatorMatrix).map(([evaluatorModel, rankings]) => (
+              <tr key={evaluatorModel}>
+                <td className="matrix-evaluator-cell">
+                  <span title={evaluatorModel}>
+                    {evaluatorModel.split('/')[1] || evaluatorModel}
+                  </span>
+                </td>
+                {labels.map((label) => {
+                  const position = rankings[label];
+                  return (
+                    <td
+                      key={`${evaluatorModel}-${label}`}
+                      className="matrix-position-cell"
+                      style={{ backgroundColor: getPositionColor(position) }}
+                    >
+                      <span className="position-badge">{getPositionBadge(position)}</span>
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }
 
 function extractReasoningHighlights(ranking, labelToModel) {
@@ -133,6 +197,31 @@ export default function Stage2({ rankings, labelToModel, aggregateRankings }) {
     <div className="stage stage2">
       <h3 className="stage-title">Stage 2: Peer Rankings</h3>
 
+      {aggregateRankings && aggregateRankings.length > 0 && (
+        <div className="aggregate-rankings">
+          <h4>Aggregate Rankings (Street Cred)</h4>
+          <p className="stage-description">
+            Combined results across all peer evaluations (lower score is better):
+          </p>
+          <div className="aggregate-list">
+            {aggregateRankings.map((agg, index) => (
+              <div key={index} className="aggregate-item">
+                <span className="rank-position">#{index + 1}</span>
+                <span className="rank-model">
+                  {agg.model.split('/')[1] || agg.model}
+                </span>
+                <span className="rank-score">
+                  Avg: {agg.average_rank.toFixed(2)}
+                </span>
+                <span className="rank-count">
+                  ({agg.rankings_count} votes)
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {controversyMetrics && (
         <div className="controversy-score">
           <div className="controversy-header">
@@ -170,18 +259,11 @@ export default function Stage2({ rankings, labelToModel, aggregateRankings }) {
                 {controversyMetrics.controversyScore >= 70 &&
                   "Significant disagreement among models. This question may be context-dependent or have multiple valid approaches."}
               </p>
-              <div className="controversy-variance-table">
-                {Object.entries(controversyMetrics.stats)
-                  .sort((a, b) => b[1].stdDev - a[1].stdDev)
-                  .map(([model, stat]) => (
-                    <div key={model} className="variance-row">
-                      <span className="variance-model">{model.split('/')[1] || model}</span>
-                      <span className="variance-stat">
-                        avg rank: {stat.mean.toFixed(1)}, variance: {stat.stdDev.toFixed(2)}
-                      </span>
-                    </div>
-                  ))}
-              </div>
+              <RankingMatrix
+                evaluatorMatrix={controversyMetrics.evaluatorMatrix}
+                labelToModel={labelToModel}
+                labels={controversyMetrics.labels}
+              />
             </div>
           )}
         </div>
@@ -356,31 +438,6 @@ export default function Stage2({ rankings, labelToModel, aggregateRankings }) {
           ) : null;
         })()}
       </div>
-
-      {aggregateRankings && aggregateRankings.length > 0 && (
-        <div className="aggregate-rankings">
-          <h4>Aggregate Rankings (Street Cred)</h4>
-          <p className="stage-description">
-            Combined results across all peer evaluations (lower score is better):
-          </p>
-          <div className="aggregate-list">
-            {aggregateRankings.map((agg, index) => (
-              <div key={index} className="aggregate-item">
-                <span className="rank-position">#{index + 1}</span>
-                <span className="rank-model">
-                  {agg.model.split('/')[1] || agg.model}
-                </span>
-                <span className="rank-score">
-                  Avg: {agg.average_rank.toFixed(2)}
-                </span>
-                <span className="rank-count">
-                  ({agg.rankings_count} votes)
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
