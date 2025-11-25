@@ -369,28 +369,6 @@ export default function Stage2({ rankings, labelToModel, aggregateRankings }) {
           </ReactMarkdown>
         </div>
 
-        {rankings[activeTab].parsed_ranking &&
-         rankings[activeTab].parsed_ranking.length > 0 && (
-          <div className="parsed-ranking">
-            <strong>Extracted Ranking:</strong>
-            <ol>
-              {rankings[activeTab].parsed_ranking.map((label, i) => {
-                // Normalize the label format
-                const normalizedLabel = label.trim();
-                const modelName = labelToModel && labelToModel[normalizedLabel];
-
-                return (
-                  <li key={i}>
-                    {modelName
-                      ? modelName.split('/')[1] || modelName
-                      : normalizedLabel}
-                  </li>
-                );
-              })}
-            </ol>
-          </div>
-        )}
-
         {(() => {
           const reasoning = extractReasoningHighlights(rankings[activeTab], labelToModel);
           const tabId = `reasoning-${activeTab}`;

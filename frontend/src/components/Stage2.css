@@ -124,29 +124,6 @@
   font-size: 14px;
 }
 
-.parsed-ranking {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 2px solid #e0e0e0;
-}
-
-.parsed-ranking strong {
-  color: #2a7ae2;
-  font-size: 13px;
-}
-
-.parsed-ranking ol {
-  margin: 8px 0 0 0;
-  padding-left: 24px;
-  color: #333;
-}
-
-.parsed-ranking li {
-  margin: 4px 0;
-  font-family: monospace;
-  font-size: 13px;
-}
-
 .rank-count {
   color: #999;
   font-size: 12px;
