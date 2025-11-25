@@ -198,7 +198,7 @@ function extractReasoningHighlights(ranking, labelToModel) {
 
 export default function Stage2({ rankings, labelToModel, aggregateRankings }) {
   const [activeTab, setActiveTab] = useState(0);
-  const [expandedMetrics, setExpandedMetrics] = useState(false);
+  const [expandedMetrics, setExpandedMetrics] = useState(true);
   const [expandedReasoning, setExpandedReasoning] = useState({});
   const [expandedVerification, setExpandedVerification] = useState(false);
   const controversyMetrics = calculateControversyMetrics(rankings, labelToModel);
