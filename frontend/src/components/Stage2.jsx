@@ -2,6 +2,20 @@ import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import './Stage2.css';
 
+function stripFinalRankingSection(text) {
+  // Remove "FINAL RANKING:" section and everything after it
+  // This eliminates redundant ranking display (already shown in matrix)
+  if (!text) return text;
+
+  const finalRankingIndex = text.indexOf('FINAL RANKING:');
+  if (finalRankingIndex === -1) {
+    return text; // No FINAL RANKING section, return as-is
+  }
+
+  // Return text up to "FINAL RANKING:", trimming trailing whitespace
+  return text.substring(0, finalRankingIndex).trim();
+}
+
 function deAnonymizeText(text, labelToModel) {
   if (!labelToModel) return text;
 
@@ -365,7 +379,7 @@ export default function Stage2({ rankings, labelToModel, aggregateRankings }) {
         </div>
         <div className="ranking-content markdown-content">
           <ReactMarkdown>
-            {deAnonymizeText(rankings[activeTab].ranking, labelToModel)}
+            {deAnonymizeText(stripFinalRankingSection(rankings[activeTab].ranking), labelToModel)}
           </ReactMarkdown>
         </div>
 
