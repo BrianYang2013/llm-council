@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import Stage1 from './Stage1';
 import Stage2 from './Stage2';
 import Stage3 from './Stage3';
+import { exportDecisionJournal } from '../utils/export';
 import './ChatInterface.css';
 
 export default function ChatInterface({
@@ -50,6 +51,18 @@ export default function ChatInterface({
 
   return (
     <div className="chat-interface">
+      {conversation.messages.length > 0 && conversation.messages.some(m => m.role === 'assistant') && (
+        <div className="chat-header">
+          <h2>{conversation.title || 'Conversation'}</h2>
+          <button
+            className="export-button"
+            onClick={() => exportDecisionJournal(conversation)}
+            title="Export this conversation as a Decision Journal (Markdown)"
+          >
+            📓 Export
+          </button>
+        </div>
+      )}
       <div className="messages-container">
         {conversation.messages.length === 0 ? (
           <div className="empty-state">

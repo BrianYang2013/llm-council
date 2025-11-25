@@ -76,3 +76,36 @@
   color: #999;
   font-size: 12px;
 }
+
+.view-toggle {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #ffffff;
+}
+
+.view-button {
+  flex: 1;
+  padding: 8px 10px;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  transition: all 0.2s;
+}
+
+.view-button:hover {
+  background: #efefef;
+  border-color: #4a90e2;
+  color: #4a90e2;
+}
+
+.view-button.active {
+  background: #4a90e2;
+  border-color: #4a90e2;
+  color: #ffffff;
+}

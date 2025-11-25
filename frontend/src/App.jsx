@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import ChatInterface from './components/ChatInterface';
+import PersonalityProfiles from './components/PersonalityProfiles';
 import { api } from './api';
 import './App.css';
 
 function App() {
   const [conversations, setConversations] = useState([]);
+  const [fullConversations, setFullConversations] = useState([]); // Full conversation data for analytics
   const [currentConversationId, setCurrentConversationId] = useState(null);
   const [currentConversation, setCurrentConversation] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [view, setView] = useState('chat'); // 'chat' or 'analytics'
+  const [isLoadingAnalytics, setIsLoadingAnalytics] = useState(false);
 
   // Load conversations on mount
   useEffect(() => {
@@ -21,6 +25,13 @@ function App() {
       loadConversation(currentConversationId);
     }
   }, [currentConversationId]);
+
+  // Load full conversation data when switching to Analytics view
+  useEffect(() => {
+    if (view === 'analytics' && conversations.length > 0) {
+      loadFullConversations();
+    }
+  }, [view, conversations]);
 
   const loadConversations = async () => {
     try {
@@ -37,6 +48,28 @@ function App() {
       setCurrentConversation(conv);
     } catch (error) {
       console.error('Failed to load conversation:', error);
+    }
+  };
+
+  const loadFullConversations = async () => {
+    if (fullConversations.length === conversations.length && fullConversations.length > 0) {
+      // Already loaded full data for all conversations
+      return;
+    }
+
+    setIsLoadingAnalytics(true);
+    try {
+      // Load full conversation data for all conversations in parallel
+      const fullData = await Promise.all(
+        conversations.map(conv => api.getConversation(conv.id))
+      );
+      // Filter out null results in case any conversation fails to load
+      setFullConversations(fullData.filter(c => c !== null));
+    } catch (error) {
+      console.error('Failed to load full conversations for analytics:', error);
+      setFullConversations([]);
+    } finally {
+      setIsLoadingAnalytics(false);
     }
   };
 
@@ -188,12 +221,27 @@ function App() {
         currentConversationId={currentConversationId}
         onSelectConversation={handleSelectConversation}
         onNewConversation={handleNewConversation}
+        currentView={view}
+        onViewChange={setView}
       />
-      <ChatInterface
-        conversation={currentConversation}
-        onSendMessage={handleSendMessage}
-        isLoading={isLoading}
-      />
+      {view === 'chat' ? (
+        <ChatInterface
+          conversation={currentConversation}
+          onSendMessage={handleSendMessage}
+          isLoading={isLoading}
+        />
+      ) : (
+        <div className="view-container">
+          {isLoadingAnalytics ? (
+            <div className="analytics-loading">
+              <div className="loading-spinner"></div>
+              <p>Loading conversation data for analysis...</p>
+            </div>
+          ) : (
+            <PersonalityProfiles conversations={fullConversations} />
+          )}
+        </div>
+      )}
     </div>
   );
 }

@@ -6,6 +6,8 @@ export default function Sidebar({
   currentConversationId,
   onSelectConversation,
   onNewConversation,
+  currentView,
+  onViewChange,
 }) {
   return (
     <div className="sidebar">
@@ -13,6 +15,21 @@ export default function Sidebar({
         <h1>LLM Council</h1>
         <button className="new-conversation-btn" onClick={onNewConversation}>
           + New Conversation
+        </button>
+      </div>
+
+      <div className="view-toggle">
+        <button
+          className={`view-button ${currentView === 'chat' ? 'active' : ''}`}
+          onClick={() => onViewChange('chat')}
+        >
+          💬 Chat
+        </button>
+        <button
+          className={`view-button ${currentView === 'analytics' ? 'active' : ''}`}
+          onClick={() => onViewChange('analytics')}
+        >
+          🧬 Analytics
         </button>
       </div>
 

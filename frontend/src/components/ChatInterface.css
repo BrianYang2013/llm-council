@@ -6,6 +6,38 @@
   background: #ffffff;
 }
 
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: #f9f9f9;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.chat-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.export-button {
+  padding: 8px 12px;
+  background: #f0fff0;
+  border: 1px solid #c6e9c9;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #2e7d32;
+  transition: all 0.2s;
+}
+
+.export-button:hover {
+  background: #e8f5e9;
+  border-color: #81c784;
+}
+
 .messages-container {
   flex: 1;
   overflow-y: auto;
