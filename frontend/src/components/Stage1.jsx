@@ -2,27 +2,6 @@ import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import './Stage1.css';
 
-function extractTLDR(text) {
-  // Look for explicit TL;DR format
-  const tldrMatch = text.match(/TL;?DR:?\s*(.+?)(?:\n|$)/i);
-  if (tldrMatch) {
-    return tldrMatch[1].trim();
-  }
-
-  // Extract first meaningful sentence (heuristic)
-  const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 10);
-  if (sentences.length > 0) {
-    let summary = sentences[0].trim();
-    // Limit to 140 characters for readability
-    if (summary.length > 140) {
-      summary = summary.substring(0, 137) + '...';
-    }
-    return summary;
-  }
-
-  return 'Response provided';
-}
-
 export default function Stage1({ responses }) {
   const [activeTab, setActiveTab] = useState(0);
 
@@ -46,32 +25,18 @@ export default function Stage1({ responses }) {
         </span>
       </div>
 
-      <div className="stage1-tabs-container">
-        <div className="tabs">
-          {responses.map((resp, index) => (
-            <button
-              key={index}
-              className={`tab ${activeTab === index ? 'active' : ''}`}
-              onClick={() => setActiveTab(index)}
-              title={`This will be evaluated as ${getAnonymousLabel(index)} in Stage 2`}
-            >
-              {resp.model.split('/')[1] || resp.model}
-              <span className="response-label">{getAnonymousLabel(index)}</span>
-            </button>
-          ))}
-        </div>
-        <div className="stage1-summaries">
-          {responses.map((resp, index) => (
-            <div key={index} className="summary-item">
-              <span className="summary-model">
-                {resp.model.split('/')[1] || resp.model}
-              </span>
-              <span className="summary-text">
-                {extractTLDR(resp.response)}
-              </span>
-            </div>
-          ))}
-        </div>
+      <div className="tabs">
+        {responses.map((resp, index) => (
+          <button
+            key={index}
+            className={`tab ${activeTab === index ? 'active' : ''}`}
+            onClick={() => setActiveTab(index)}
+            title={`This will be evaluated as ${getAnonymousLabel(index)} in Stage 2`}
+          >
+            {resp.model.split('/')[1] || resp.model}
+            <span className="response-label">{getAnonymousLabel(index)}</span>
+          </button>
+        ))}
       </div>
 
       <div className="tab-content">

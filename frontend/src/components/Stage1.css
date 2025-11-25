@@ -102,36 +102,3 @@
   line-height: 1.6;
 }
 
-.stage1-tabs-container {
-  margin-bottom: 16px;
-}
-
-.stage1-summaries {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.summary-item {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 12px;
-  background: #ffffff;
-  border: 1px solid #e8e8e8;
-  border-radius: 6px;
-  font-size: 13px;
-}
-
-.summary-model {
-  font-weight: 600;
-  color: #4a90e2;
-  font-size: 12px;
-}
-
-.summary-text {
-  color: #555;
-  line-height: 1.4;
-  font-size: 12px;
-}

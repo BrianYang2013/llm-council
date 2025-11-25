@@ -90,7 +90,6 @@ Then open http://localhost:5173 in your browser.
 - **Disagreement Heatmap** - Visual controversy score showing consensus level (0-100%)
 - **Model Personality Profiles** - Understand each model's ranking behavior, consistency, and tendencies
 - **"Why This Ranking?" Expanders** - Click to see extracted strengths and weaknesses per evaluation
-- **TL;DR Summaries** - Quick one-line summaries of each model's response in Stage 1
 
 ### Transparency & Trust
 - **Anonymization Mapping Table** - See exactly which anonymous label (Response A/B/C) maps to which model
@@ -145,12 +144,6 @@ Then open http://localhost:5173 in your browser.
   - Collapsible UI showing strength/weakness summaries
   - Helps understand evaluation rationale without reading full text
 
-- **TL;DR One-Line Summaries** - Quick reference for Stage 1:
-  - Automatic extraction of first meaningful sentence
-  - Explicit TL;DR detection from response text
-  - Grid layout showing all summaries at a glance
-  - 140 character limit for readability
-
 - **Export to Decision Journal** - Record keeping:
   - Export individual conversations as markdown files
   - Includes all stages and consensus metrics
@@ -185,7 +178,6 @@ Then open http://localhost:5173 in your browser.
   - Info banner explaining anonymization process
   - Response label badges on tabs showing future anonymous labels
   - Tooltip on tabs explaining stage 2 mapping
-  - Improved visual hierarchy
 
 #### Bug Fixes
 - Fixed Analytics blank page by implementing lazy loading of full conversation data
