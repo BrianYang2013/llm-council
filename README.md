@@ -87,7 +87,7 @@ Then open http://localhost:5173 in your browser.
 - **Stage 3: Final Synthesis** - Chairman integrates all perspectives into one comprehensive answer
 
 ### Advanced Analytics & Insights
-- **Disagreement Heatmap** - Visual controversy score showing consensus level (0-100%)
+- **Controversy Score & Ranking Matrix** - Visual consensus level (0-100%) with concrete ranking data showing exactly who ranked what
 - **Model Personality Profiles** - Understand each model's ranking behavior, consistency, and tendencies
 - **"Why This Ranking?" Expanders** - Click to see extracted strengths and weaknesses per evaluation
 
@@ -132,11 +132,13 @@ Then open http://localhost:5173 in your browser.
     - Step-by-step verification guide
   - Stage 1 info banner and response labels showing future anonymous labels
 
-- **Disagreement Heatmap** - Visual controversy scoring:
-  - Color-coded scale (green=consensus → red=disagreement)
-  - Per-model variance statistics
-  - Context-aware interpretation of disagreement levels
-  - Expandable details showing which models disagree most
+- **Ranking Matrix** - Concrete visualization of peer rankings:
+  - Evaluators as rows, responses as columns
+  - Color-coded position badges (green for 1st, yellow for 2nd, gray for 3rd+)
+  - Spot patterns: does Model A consistently rank Model B last?
+  - Detect bias: reveal systematic disagreement between models
+  - Controversy score (0-100%) with contextual interpretation
+  - Expanded by default for immediate visibility
 
 - **"Why This Ranking?" Expanders** - Reasoning highlights:
   - Extract positive keywords (strengths) from evaluations
@@ -169,10 +171,14 @@ Then open http://localhost:5173 in your browser.
   - Green-tinted export button with intuitive styling
 
 - Stage 2 improvements:
+  - **Ranking Matrix Visualization** - Replace abstract statistics with concrete ranking data
+  - **Streamlined Information Flow** - Street Cred → Ranking Matrix → Deep Dive evaluations
+  - **Removed Redundancy** - Eliminated duplicate Extracted Ranking from evaluator tabs
+  - **Filtered FINAL RANKING** - Removed structural ranking lists from evaluation display
+  - **Expanded by Default** - Controversy Score section shows Ranking Matrix immediately
   - Anonymization mapping table with clear headers
   - Verification note explaining anonymization integrity
   - Expandable verification button with educational content
-  - Better description text about model names in evaluations
 
 - Stage 1 improvements:
   - Info banner explaining anonymization process
@@ -204,9 +210,16 @@ Then open http://localhost:5173 in your browser.
 
 ## Usage Tips
 
+### Analyzing Rankings & Spotting Patterns
+1. Look at the **Ranking Matrix** at the top of Stage 2 (expanded by default)
+2. Scan rows to spot patterns: Does Model A always rank Model B last?
+3. Scan columns to find consensus: Which response is consistently ranked 1st?
+4. Check the **Controversy Score** to understand agreement level (0-100%)
+5. Read individual evaluations for the reasoning behind rankings
+
 ### Verifying Anonymization
 1. Check the **Anonymization Mapping** table in Stage 2
-2. Note which Response was ranked highest in the evaluations
+2. Look at the Ranking Matrix to see which anonymous label was ranked highest
 3. Cross-reference the mapping to see which model performed best
 4. Read the "How Does Anonymization Work?" section for detailed explanation
 
@@ -218,11 +231,15 @@ Then open http://localhost:5173 in your browser.
 5. Click on model cards to see detailed ranking behavior
 
 ### Making Important Decisions
-1. Use the council to get multiple perspectives
-2. Check the disagreement/controversy score
-3. If high agreement: you can trust the consensus
-4. If high disagreement: consider it a nuanced topic, weigh perspectives carefully
-5. Export as Decision Journal for future reference
+1. Review **Stage 1** to see all individual responses
+2. Study the **Ranking Matrix** in Stage 2 to understand model consensus
+3. Check the **Controversy Score**:
+   - High agreement (0-30%): models strongly agree, you can trust the consensus
+   - Mixed (30-70%): differing perspectives, weigh them carefully
+   - High disagreement (70-100%): nuanced topic, consider multiple viewpoints
+4. Read individual **evaluations** for detailed reasoning behind rankings
+5. Review the **Street Cred** aggregate rankings for final consensus
+6. Export as Decision Journal for future reference
 
 ### Exporting Conversations
 1. Run a council deliberation
